@@ -27,7 +27,7 @@ var area = d3.area()
     .y1(function(d) { return y(d.nevents); })
     .curve(d3.curveMonotoneX);
 
-d3.csv("Mexico.csv", function(d) {
+d3.csv("Venezuela.csv", function(d) {
   d.date = parseTime(d.date);
   d.nevents = +d.nevents;
   return d;

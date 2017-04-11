@@ -40,6 +40,7 @@ text{
 </div>
 
 <script>
+ 
 
 chart("Brazil.csv", "orange");
 
@@ -49,7 +50,7 @@ var colorrange = [];
 var topTermsNo = 20;
 
   var sizeScale = d3.scale.linear()
-          .range([12, 18]);
+          .range([12, 20]);
 function chart(csvpath, color) {
 
 if (color == "blue") {
@@ -68,7 +69,7 @@ var timeAxisFormat = d3.time.format("%Y-%m-%d");
 
 var margin = {top: 20, right: 40, bottom: 30, left: 50};
 var width = document.body.clientWidth - margin.left - margin.right;
-var height = 400 - margin.top - margin.bottom;
+var height = 450 - margin.top - margin.bottom;
 var dateRange;
 var tooltip = d3.select("body")
     .append("div")
@@ -83,7 +84,7 @@ var x = d3.time.scale()
     .range([0, width]);
 
 var y = d3.scale.linear()
-    .range([height-10, 0]);
+    .range([height-11, 0]);
 
 var z = d3.scale.category20();
 
@@ -95,10 +96,11 @@ var xAxis = d3.svg.axis()
 
 var yAxis = d3.svg.axis()
     .scale(y)    
-    .ticks(5);
+    .ticks(5)
+    // .tickValues([0, 0.5, 1.0, 1.5, 2.0, 2.5, 3.055]);
 
-var yAxisr = d3.svg.axis()
-    .scale(y);
+// var yAxisr = d3.svg.axis()
+//     .scale(y);
 
 var stack = d3.layout.stack()
     .offset("silhouette")
@@ -231,7 +233,7 @@ var largeVal = 0;
                        }
                     }
                 }
-              if(val > 0.145)
+              if(val > 0.145 && d.key!="videographer")
               return d.key;
         })
       .attr("x", function(d) {
@@ -250,11 +252,11 @@ var largeVal = 0;
                 if(d.key == "drought")
                   j = 4;
                 
-                var xMar = -15;
+                var xMar = 0;
                 if(j==d.values.length-1)
                   xMar = -40;
                 if(j==0)
-                  xMar = 5;
+                  xMar = 25;
                 return x(d.values[j].date) + xMar ; 
             })
       .attr("y", function(d) {
@@ -292,12 +294,13 @@ var largeVal = 0;
                 }
                  return sizeScale(val)
               })
+      .attr("text-anchor", "middle")
       
 
 
   svg.append("g")
       .attr("class", "x axis")
-      .attr("transform", "translate(0," + 340 + ")")
+      .attr("transform", "translate(0," + 390 + ")")
       .call(xAxis)
       .attr("font-family", "sans-serif")
       .append("text")
