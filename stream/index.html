@@ -123,15 +123,25 @@ var svg = d3.select(".chart").append("svg")
   .append("g")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-var graph = d3.csv(csvpath, function(data) {
 var allkeys = [];
 var allDates = [];
+
+var termsKeysValue = [];
+
+var graph = d3.csv(csvpath, function(data) {
+
+
   data.forEach(function(d) {
     d.date = format.parse(d.date);
     d.value = +d.value;
     allDates.push(d.date);
   });
 
+  for(var i=0; i<data.length;i++){
+      var termKeys = {}
+  }
+
+debugger;
     data.sort(function(a, b) {
       return parseFloat(b.value) - parseFloat(a.value);
     });

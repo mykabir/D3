@@ -11,6 +11,8 @@ var svg = d3.select("svg"),
 
 var parseTime = d3.timeParse("%Y-%m");
 
+var parseYear = d3.timeParse("%Y");
+
 var x = d3.scaleTime()
     .rangeRound([0, width]);
 
@@ -41,8 +43,9 @@ d3.csv("Mexico.csv", function(d) {
   area.y0(y(0));
 
   g.append("g")
+      .attr("class", "x-axis")
       .attr("transform", "translate(0," + height + ")")
-      .call(d3.axisBottom(x).tickFormat(d3.timeFormat("%Y-%m")))
+      .call(d3.axisBottom(x).tickFormat(d3.timeFormat("%B")))
       .attr("font-family", "sans-serif")
       .attr("font-size", 12)
       .append("text")
@@ -53,6 +56,10 @@ d3.csv("Mexico.csv", function(d) {
       .attr("fill", "#000")
       .attr("font-family", "sans-serif")
       .attr("font-size", 15);
+
+  g.selectAll(".x-axis g")
+    .append("text")
+    .text(function(d){console.log((d.getYear())) } )
 
   g.append("g")
       .call(d3.axisLeft(y).ticks(5))
@@ -73,8 +80,8 @@ d3.csv("Mexico.csv", function(d) {
       .attr("stroke", "steelblue")
       .attr("stroke-linejoin", "round")
       .attr("stroke-linecap", "round")
-      .attr("stroke-width", 1.5)
-      .attr("stroke", "rgba(31, 119, 180, 0.4)")
+      .attr("stroke-width", 0.75)
+      .attr("stroke", "rgba(3, 19, 150, 1)")
       .attr("d", line);
 
 var i = -1;
@@ -82,7 +89,7 @@ var len = data.length;
     g.append("path")
       .datum(data)
       .attr("class", "arealine")
-      .attr("fill", "rgba(31, 119, 180, 0.1)")
+      .attr("fill", "rgba(3, 19, 150, 0.20)")
       .attr("d", area);
 
 
@@ -106,8 +113,9 @@ var len = data.length;
             }
      })
       .attr("stroke", function(d){
-           return "#000";
+           return "rgba(3, 19, 150, 0.5)";
      })
+
 
 var i = 0; 
 var h = height - 10;
