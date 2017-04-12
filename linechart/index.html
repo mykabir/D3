@@ -48,15 +48,7 @@ d3.csv("Mexico.csv", function(d) {
       .call(d3.axisBottom(x).tickFormat(d3.timeFormat("%B")))
       .attr("font-family", "sans-serif")
       .attr("font-size", 12)
-      .append("text")
-      .text("Date")
-      .attr("y", 50)
-      .attr("x", width/2)
-      .attr("text-ancor", "middle")
-      .attr("fill", "#000")
-      .attr("font-family", "sans-serif")
-      .attr("font-size", 15);
-
+    
   g.selectAll(".x-axis g")
     .append("text")
     .text(function(d){console.log((d.getMonth()))
@@ -149,7 +141,7 @@ var h = height - 10;
             }
      })
      .style("stroke-dasharray", "2")
-     .style("stroke-width", "2");
+     .style("stroke-width", "1");
 
      g.append("g")
        .selectAll("text")
