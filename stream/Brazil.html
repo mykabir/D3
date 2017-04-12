@@ -41,16 +41,15 @@ text{
 
 <script>
  
-
 chart("Brazil.csv", "orange");
 
 var datearray = [];
 var colorrange = [];
 
-var topTermsNo = 20;
+var topTermsNo = 25;
 
   var sizeScale = d3.scale.linear()
-          .range([12, 20]);
+          .range([10, 30]);
 function chart(csvpath, color) {
 
 if (color == "blue") {
@@ -123,15 +122,58 @@ var svg = d3.select(".chart").append("svg")
   .append("g")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-var graph = d3.csv(csvpath, function(data) {
 var allkeys = [];
 var allDates = [];
+
+var termsKeysValue = [];
+
+var graph = d3.csv(csvpath, function(data) {
+
+
+  var termsKeysValue = {};
+
   data.forEach(function(d) {
     d.date = format.parse(d.date);
     d.value = +d.value;
     allDates.push(d.date);
+  
+
+    if(termsKeysValue[d.key]){
+        var val = d.value;
+        termsKeysValue[d.key].value = val + termsKeysValue[d.key].value;
+      }
+      else {
+        termsKeysValue[d.key] = new Object();
+        termsKeysValue[d.key].value = d.value;
+      }
+
   });
 
+   var keysArray = [];
+   for (var key in termsKeysValue) {
+    // console.log(key.length)
+    if(key.length > 2){
+    var obj = {terms: key, value: termsKeysValue[key].value};
+    keysArray.push(obj);
+  }
+  
+}
+ keysArray.sort(function(a, b) {
+      return parseFloat(b.value) - parseFloat(a.value);
+    });
+
+  keysArray = keysArray.splice(0, topTermsNo);
+  console.log(keysArray);
+
+  var uniquekeys = [];
+  for(var i=0; i<keysArray.length;i++){
+    var currentKey = keysArray[i].terms;
+    uniquekeys.push(currentKey);
+  }
+  console.log(uniquekeys)
+  // console.log(data)
+
+// debugger;
     data.sort(function(a, b) {
       return parseFloat(b.value) - parseFloat(a.value);
     });
@@ -140,29 +182,29 @@ var allDates = [];
     allkeys.push(d.key);
   });
 
-var uniquekeys = allkeys.filter(function(elem, index, self) {
-    return index == self.indexOf(elem);
-})
-console.log(uniquekeys[topTermsNo]);
+// var uniquekeys = allkeys.filter(function(elem, index, self) {
+//     return index == self.indexOf(elem);
+// })
+// // console.log(uniquekeys[topTermsNo]);
 
-    var spliceLen = 0;
-    for(var i=0;i<data.length;i++){
-        if(data[i].key == uniquekeys[topTermsNo]){
-          spliceLen = i;
-          break;
-        }
-    }
-console.log(spliceLen);
- data = data.splice(0, spliceLen);
+//     var spliceLen = 0;
+//     for(var i=0;i<data.length;i++){
+//         if(data[i].key == uniquekeys[topTermsNo]){
+//           spliceLen = i;
+//           break;
+//         }
+//     }
+// console.log(spliceLen);
+//  data = data.splice(0, spliceLen);
   dateRange = d3.extent(data, function(d) { return d.date; });
-  console.log(dateRange);
-  console.log(data.length);
+  // console.log(dateRange);
+  // console.log(data.length);
     var start = dateRange[0];
     var end = dateRange[1];
 
-var uniquekeys = allkeys.filter(function(elem, index, self) {
-    return index == self.indexOf(elem);
-})
+// var uniquekeys = allkeys.filter(function(elem, index, self) {
+//     return index == self.indexOf(elem);
+// })
 
 function isDateInArray(needle, haystack) {
   for (var i = 0; i < haystack.length; i++) {
@@ -179,6 +221,23 @@ for (var i = 0; i < allDates.length; i++) {
     uniqueDates.push(allDates[i]);
   }
 }
+var startDate = new Date(uniqueDates[0])
+startDate.setDate(startDate.getDate()-1);
+
+var endDate = new Date(uniqueDates[uniqueDates.length-1])
+endDate.setDate(endDate.getDate()+1);
+
+console.log(startDate)
+console.log(endDate)
+var addedDates = [];
+addedDates.push(startDate);
+for(var i=0; i<uniqueDates.length;i++){
+    addedDates.push(uniqueDates[i]);
+}
+addedDates.push(endDate);
+console.log(addedDates)
+
+uniqueDates = addedDates;
 console.log(uniquekeys);
 console.log(uniqueDates);
 var newData = [];
@@ -200,7 +259,6 @@ var newData = [];
 
   data = newData;
   // data.forEach
-
   var layers = stack(nest.entries(data));
 console.log(layers);
   x.domain(d3.extent(data, function(d) { return d.date; }));
@@ -212,8 +270,9 @@ console.log(layers);
       .attr("class", "layer")
       .attr("d", function(d) { return area(d.values); })
       .style("fill", function(d, i) { return z(i); })
+      .attr("opacity", 0.7)
 
-sizeScale.domain = ([0.145,1]);
+sizeScale.domain = ([0.1,1]);
 var prevYVal = 0;
 var counter = 0;
 var largeVal = 0;
@@ -221,7 +280,7 @@ var largeVal = 0;
       .data(layers)
       .enter().append("text")
       .text(function(d){
-            console.log(d); 
+            // console.log(d); 
             var i = 0;
                  var val = 0;
                  var j = 0;
@@ -233,7 +292,7 @@ var largeVal = 0;
                        }
                     }
                 }
-              if(val > 0.145 && d.key!="videographer")
+         
               return d.key;
         })
       .attr("x", function(d) {
@@ -274,10 +333,10 @@ var largeVal = 0;
                 if(d.key == "drought")
                   j = 4;
 
-                console.log(d.key + " date: " + d.values[j].date )
-                console.log(y(d.values[j].y0) + " " + y(d.values[j].y))
-                console.log(y(d.values[j].y0));
-                console.log(y(d.values[j].y + d.values[j].y0));
+                // console.log(d.key + " date: " + d.values[j].date )
+                // console.log(y(d.values[j].y0) + " " + y(d.values[j].y))
+                // console.log(y(d.values[j].y0));
+                // console.log(y(d.values[j].y + d.values[j].y0));
               return (y(d.values[j].y + d.values[j].y0) + y(d.values[j].y0))/2 + 5;
             })
       .attr("font-size", function(d) {
@@ -323,67 +382,6 @@ var largeVal = 0;
       .attr("font-family", "sans-serif")
       .attr("style", "font-size: 14px")
 
-  // svg.selectAll(".layer")
-  //   .attr("opacity", 1)
-  //   .on("mouseover", function(d, i) {
-  //     svg.selectAll(".layer").transition()
-  //     .duration(250)
-  //     .attr("opacity", function(d, j) {
-  //       return j != i ? 0.6 : 1;
-  //   })})
-
-  //   .on("mousemove", function(d, i) {
-  //     mousex = d3.mouse(this);
-  //     mousex = mousex[0];
-  //     var invertedx = x.invert(mousex);
-  //     invertedx = invertedx.getMonth() + invertedx.getDate();
-  //     var selected = (d.values);
-  //     for (var k = 0; k < selected.length; k++) {
-  //       datearray[k] = selected[k].date
-  //       datearray[k] = datearray[k].getMonth() + datearray[k].getDate();
-  //     }
-
-  //     mousedate = datearray.indexOf(invertedx);
-  //     pro = d.values[mousedate].value;
-
-  //     d3.select(this)
-  //     .classed("hover", true)
-  //     .attr("stroke", strokecolor)
-  //     .attr("stroke-width", "0.5px"), 
-  //     tooltip.html( "<p>" + d.key + "<br>" + pro + "</p>" ).style("visibility", "visible");
-      
-  //   })
-  //   .on("mouseout", function(d, i) {
-  //    svg.selectAll(".layer")
-  //     .transition()
-  //     .duration(250)
-  //     .attr("opacity", "1");
-  //     d3.select(this)
-  //     .classed("hover", false)
-  //     .attr("stroke-width", "0px"), tooltip.html( "<p>" + d.key + "<br>" + pro + "</p>" ).style("visibility", "hidden");
-  // })
-    
-  // var vertical = d3.select(".chart")
-  //       .append("div")
-  //       .attr("class", "remove")
-  //       .style("position", "absolute")
-  //       .style("z-index", "19")
-  //       .style("width", "1px")
-  //       .style("height", "380px")
-  //       .style("top", "10px")
-  //       .style("bottom", "30px")
-  //       .style("left", "0px")
-  //       .style("background", "#fff");
-
-  // d3.select(".chart")
-  //     .on("mousemove", function(){  
-  //        mousex = d3.mouse(this);
-  //        mousex = mousex[0] + 5;
-  //        vertical.style("left", mousex + "px" )})
-  //     .on("mouseover", function(){  
-  //        mousex = d3.mouse(this);
-  //        mousex = mousex[0] + 5;
-  //        vertical.style("left", mousex + "px")});
 });
 }
 </script>

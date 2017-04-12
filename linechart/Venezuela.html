@@ -45,9 +45,9 @@ d3.csv("Venezuela.csv", function(d) {
   g.append("g")
       .attr("class", "x-axis")
       .attr("transform", "translate(0," + height + ")")
-      .call(d3.axisBottom(x).tickFormat(d3.timeFormat("%B")))
+      .call(d3.axisBottom(x).tickFormat(d3.timeFormat("%b")))
       .attr("font-family", "sans-serif")
-      .attr("font-size", 12)
+      .attr("font-size", 13)
 
   g.selectAll(".x-axis g")
     .append("text")
@@ -59,12 +59,13 @@ d3.csv("Venezuela.csv", function(d) {
     .attr("fill", "#000")
     .attr("y", 30)
     .attr("font-family", "sans-serif")
-    .attr("font-size", 12)
+    .attr("font-size", 13)
 
-  g.append("g")
-      .call(d3.axisLeft(y).ticks(5))
+g.append("g")
+        .attr("class", "y-axis")
+      .call(d3.axisLeft(y).ticks(5).tickSizeInner(-width).tickSizeOuter(5).tickPadding(10))
       .attr("font-family", 'sans-serif')
-      .attr("font-size", 12)
+      .attr("font-size", 13)
     .append("text")
       .attr("fill", "#000")
       .attr("transform", "rotate(-90)")
@@ -72,7 +73,12 @@ d3.csv("Venezuela.csv", function(d) {
       .attr("x", -170)
       .text("Protest events")
       .attr("font-family", "sans-serif")
-      .attr("font-size", 15);
+      .attr("font-size", 15)
+
+      g.selectAll(".y-axis line")
+      .attr("opacity", .4)
+      .attr("stroke-width", 0.3)
+      .style("stroke-dasharray", "5")
 
   g.append("path")
       .datum(data)
@@ -89,7 +95,7 @@ var len = data.length;
     g.append("path")
       .datum(data)
       .attr("class", "arealine")
-      .attr("fill", "rgba(3, 19, 150, 0.20)")
+      .attr("fill", "rgba(179,184,224, 0.75)")
       .attr("d", area);
 
 
@@ -106,7 +112,7 @@ var len = data.length;
                 return "#ff0000";
             }
             else if(d.etype=="drought"){
-                return "#ea9e0f";
+                return "#ff6a00";
             }
             else if(d.etype=="flood"){
                 return "#ee0bab";
@@ -134,7 +140,7 @@ var h = height - 10;
                 return "#ff0000";
             }
             else if(d.etype=="drought"){
-                return "#ea9e0f";
+                return "#ff6a00";
             }
             else if(d.etype=="flood"){
                 return "#ee0bab";
@@ -159,7 +165,7 @@ var h = height - 10;
                 return "#ff0000";
             }
             else if(d.etype=="drought"){
-                return "#ea9e0f";
+                return "#ff6a00";
             }
             else if(d.etype=="flood"){
                 return "#ee0bab";
