@@ -42,15 +42,15 @@ text{
 <script>
  
 
-chart("Brazil.csv", "orange");
+chart("Mexico.csv", "orange");
 
 var datearray = [];
 var colorrange = [];
 
-var topTermsNo = 20;
-var highestVal = 0;
+var topTermsNo = 25;
+
   var sizeScale = d3.scale.linear()
-          .range([10,25]);
+          .range([10, 30]);
 function chart(csvpath, color) {
 
 if (color == "blue") {
@@ -150,8 +150,6 @@ var graph = d3.csv(csvpath, function(data) {
 
   });
 
-  sizeScale.domain(d3.extent(data, function(d) { return d.value; }));
-console.log(d3.extent(data, function(d) { return d.value; }))
    var keysArray = [];
    for (var key in termsKeysValue) {
     // console.log(key.length)
@@ -275,6 +273,7 @@ console.log(layers);
       .style("fill", function(d, i) { return z(i); })
       .attr("opacity", 0.7)
 
+sizeScale.domain = ([0.1,1]);
 var prevYVal = 0;
 var counter = 0;
 var largeVal = 0;
