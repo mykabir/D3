@@ -42,7 +42,7 @@ text{
 <script>
  
 
-chart("Brazil.csv", "orange");
+chart("Brazil.csv", "orange"); 
 
 var datearray = [];
 var colorrange = [];
@@ -67,7 +67,7 @@ strokecolor = colorrange[0];
 var format = d3.time.format("%m/%d/%Y");
 var timeAxisFormat = d3.time.format("%Y-%m-%d");
 
-var margin = {top: 20, right: 40, bottom: 30, left: 50};
+var margin = {top: 20, right: 40, bottom: 30, left: 80};
 var width = document.body.clientWidth - margin.left - margin.right;
 var height = 450 - margin.top - margin.bottom;
 var dateRange;
@@ -224,23 +224,24 @@ for (var i = 0; i < allDates.length; i++) {
     uniqueDates.push(allDates[i]);
   }
 }
-var startDate = new Date(uniqueDates[0])
-startDate.setDate(startDate.getDate()-1);
+// var startDate = new Date(uniqueDates[0])
+// startDate.setDate(startDate.getDate()-1);
 
-var endDate = new Date(uniqueDates[uniqueDates.length-1])
-endDate.setDate(endDate.getDate()+1);
+// var endDate = new Date(uniqueDates[uniqueDates.length-1])
+// endDate.setDate(endDate.getDate()+1);
 
-console.log(startDate)
-console.log(endDate)
-var addedDates = [];
-addedDates.push(startDate);
-for(var i=0; i<uniqueDates.length;i++){
-    addedDates.push(uniqueDates[i]);
-}
-addedDates.push(endDate);
-console.log(addedDates)
+// console.log(startDate)
+// console.log(endDate)
+// var addedDates = [];
+// addedDates.push(startDate);
+// for(var i=0; i<uniqueDates.length;i++){
+//     addedDates.push(uniqueDates[i]);
+// }
+// addedDates.push(endDate);
+// console.log(addedDates)
 
-uniqueDates = addedDates;
+// uniqueDates = addedDates;
+
 console.log(uniquekeys);
 console.log(uniqueDates);
 var newData = [];
@@ -273,7 +274,7 @@ console.log(layers);
       .attr("class", "layer")
       .attr("d", function(d) { return area(d.values); })
       .style("fill", function(d, i) { return z(i); })
-      .attr("opacity", 0.7)
+      .attr("opacity", 0.4)
 
 var prevYVal = 0;
 var counter = 0;
@@ -315,9 +316,9 @@ var largeVal = 0;
                 
                 var xMar = 0;
                 if(j==d.values.length-1)
-                  xMar = -40;
+                  xMar = -45;
                 if(j==0)
-                  xMar = 25;
+                  xMar = 32;
                 return x(d.values[j].date) + xMar ; 
             })
       .attr("y", function(d) {
@@ -366,7 +367,7 @@ var largeVal = 0;
       .attr("font-family", "sans-serif")
       .append("text")
       .text("Date")
-      .attr("y", 30)
+      .attr("y", 35)
       .attr("x", width/2)
       .attr("text-anchor", "middle")
       .attr("font-family", "sans-serif")
@@ -380,7 +381,7 @@ var largeVal = 0;
       .text("Frequency")
       .attr("transform", "rotate(-90)")
       .attr("x", -height/2)
-      .attr("y", -35)
+      .attr("y", -50)
       .attr("font-family", "sans-serif")
       .attr("style", "font-size: 14px")
 

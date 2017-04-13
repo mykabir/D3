@@ -67,7 +67,7 @@ strokecolor = colorrange[0];
 var format = d3.time.format("%m/%d/%Y");
 var timeAxisFormat = d3.time.format("%Y-%m-%d");
 
-var margin = {top: 20, right: 40, bottom: 30, left: 50};
+var margin = {top: 20, right: 40, bottom: 30, left: 80};
 var width = document.body.clientWidth - margin.left - margin.right;
 var height = 450 - margin.top - margin.bottom;
 var dateRange;
@@ -316,9 +316,9 @@ var largeVal = 0;
                 
                 var xMar = 0;
                 if(j==d.values.length-1)
-                  xMar = -40;
+                  xMar = -45;
                 if(j==0)
-                  xMar = 25;
+                  xMar = 32;
                 return x(d.values[j].date) + xMar ; 
             })
       .attr("y", function(d) {
@@ -367,7 +367,7 @@ var largeVal = 0;
       .attr("font-family", "sans-serif")
       .append("text")
       .text("Date")
-      .attr("y", 30)
+      .attr("y", 35)
       .attr("x", width/2)
       .attr("text-anchor", "middle")
       .attr("font-family", "sans-serif")
@@ -381,7 +381,7 @@ var largeVal = 0;
       .text("Frequency")
       .attr("transform", "rotate(-90)")
       .attr("x", -height/2)
-      .attr("y", -35)
+      .attr("y", -50)
       .attr("font-family", "sans-serif")
       .attr("style", "font-size: 14px")
 
