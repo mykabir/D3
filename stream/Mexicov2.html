@@ -224,23 +224,24 @@ for (var i = 0; i < allDates.length; i++) {
     uniqueDates.push(allDates[i]);
   }
 }
-var startDate = new Date(uniqueDates[0])
-startDate.setDate(startDate.getDate()-1);
+// var startDate = new Date(uniqueDates[0])
+// startDate.setDate(startDate.getDate()-1);
 
-var endDate = new Date(uniqueDates[uniqueDates.length-1])
-endDate.setDate(endDate.getDate()+1);
+// var endDate = new Date(uniqueDates[uniqueDates.length-1])
+// endDate.setDate(endDate.getDate()+1);
 
-console.log(startDate)
-console.log(endDate)
-var addedDates = [];
-addedDates.push(startDate);
-for(var i=0; i<uniqueDates.length;i++){
-    addedDates.push(uniqueDates[i]);
-}
-addedDates.push(endDate);
-console.log(addedDates)
+// console.log(startDate)
+// console.log(endDate)
+// var addedDates = [];
+// addedDates.push(startDate);
+// for(var i=0; i<uniqueDates.length;i++){
+//     addedDates.push(uniqueDates[i]);
+// }
+// addedDates.push(endDate);
+// console.log(addedDates)
 
-uniqueDates = addedDates;
+// uniqueDates = addedDates;
+
 console.log(uniquekeys);
 console.log(uniqueDates);
 var newData = [];
@@ -273,7 +274,7 @@ console.log(layers);
       .attr("class", "layer")
       .attr("d", function(d) { return area(d.values); })
       .style("fill", function(d, i) { return z(i); })
-      .attr("opacity", 0.7)
+      .attr("opacity", 0.4)
 
 var prevYVal = 0;
 var counter = 0;
