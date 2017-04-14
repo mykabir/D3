@@ -357,8 +357,134 @@ var largeVal = 0;
                  return sizeScale(val)
               })
       .attr("text-anchor", "middle")
-      
 
+var indexOfVal = 0;
+var minVal = 500;
+var valueSetIndex = 3;
+   svg.append("g").selectAll("text")
+      .data(layers)
+      .enter().append("text")
+      .text(function(d){
+            // console.log(d); 
+             var valueSet = [];
+                for(i=0;i<d.values.length;i++){
+                    var obj = {};
+                    obj.value = d.values[i].value;
+                    obj.index = i;
+                    valueSet.push(obj);
+                }
+                 valueSet.sort(function(a, b) {
+                    return parseFloat(b.value) - parseFloat(a.value);
+                  });
+                 indexOfVal = valueSet[valueSetIndex].index;
+
+                  if(d.values[valueSetIndex].value>minVal)
+              return d.key;
+        })
+      .attr("x", function(d) {
+                 var i = 0;
+                 var val = 0;
+                 var j = 0;
+                 var xPosCount = 0;
+                 var valueSet = [];
+                for(i=0;i<d.values.length;i++){
+                    var obj = {};
+                    obj.value = d.values[i].value;
+                    obj.index = i;
+                    valueSet.push(obj);
+                }
+                 valueSet.sort(function(a, b) {
+                    return parseFloat(b.value) - parseFloat(a.value);
+                  });
+                 indexOfVal = valueSet[valueSetIndex].index;
+                console.log(indexOfVal);
+                
+                var xMar = 0;
+                if(valueSetIndex==d.values.length-1)
+                  xMar = -45;
+                if(valueSetIndex==0)
+                  xMar = 32;
+
+                if(d.values[valueSetIndex].value>minVal)
+                return x(d.values[valueSetIndex].date) + xMar; 
+            })
+      .attr("y", function(d) {
+                 var i = 0;
+                 var val = 0;
+                 var j = 0;
+                for(i=0;i<d.values.length;i++){
+                    if(d.values[i].value!=0){
+                      if(d.values[i].value >= val){
+                        val = d.values[i].value;
+                        j = i;
+                      }
+                    }
+                }
+                if(d.key == "drought")
+                  j = 4;
+
+                 var valueSet = [];
+                for(i=0;i<d.values.length;i++){
+                    var obj = {};
+                    obj.value = d.values[i].value;
+                    obj.index = i;
+                    valueSet.push(obj);
+                }
+                 valueSet.sort(function(a, b) {
+                    return parseFloat(b.value) - parseFloat(a.value);
+                  });
+                 indexOfVal = valueSet[valueSetIndex].index;
+
+              return (y(d.values[valueSetIndex].y + d.values[valueSetIndex].y0) + y(d.values[valueSetIndex].y0))/2+5;
+            })
+      .attr("font-size", function(d) {
+         var valueSet = [];
+                for(i=0;i<d.values.length;i++){
+                    var obj = {};
+                    obj.value = d.values[i].value;
+                    obj.index = i;
+                    valueSet.push(obj);
+                }
+                 valueSet.sort(function(a, b) {
+                    return parseFloat(b.value) - parseFloat(a.value);
+                  });
+                 indexOfVal = valueSet[valueSetIndex].index;
+
+                 var val = d.values[valueSetIndex].value;
+                 return sizeScale(val)
+              })
+      .attr("text-anchor", "middle")
+
+ 
+valueSetIndex = uniqueDates.length-1;
+   svg.append("g").selectAll("text")
+      .data(layers)
+      .enter().append("text")
+      .text(function(d){
+                  if(d.values[valueSetIndex].value>minVal)
+              return d.key;
+        })
+      .attr("x", function(d) {
+                 
+                
+                var xMar = 0;
+                if(valueSetIndex==d.values.length-1)
+                  xMar = -45;
+                if(valueSetIndex==0)
+                  xMar = 32;
+
+                if(d.values[valueSetIndex].value>minVal)
+                return x(d.values[valueSetIndex].date) + xMar; 
+            })
+      .attr("y", function(d) {
+              return (y(d.values[valueSetIndex].y + d.values[valueSetIndex].y0) + y(d.values[valueSetIndex].y0))/2+5;
+            })
+      .attr("font-size", function(d) {
+         
+                 var val = d.values[valueSetIndex].value;
+                 return sizeScale(val)
+              })
+      .attr("text-anchor", "middle")      
 
   svg.append("g")
       .attr("class", "x axis")
