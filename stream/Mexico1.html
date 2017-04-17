@@ -95,7 +95,7 @@ var xAxis = d3.svg.axis()
     .scale(x)
     .orient("bottom")
     .ticks(5)
-    .tickFormat(timeAxisFormat);
+    .tickFormat(d3.time.format("%b %d"));
 
 var yAxis = d3.svg.axis()
     .scale(yPos)    
@@ -271,6 +271,7 @@ var newData = [];
 console.log(layers);
   x.domain(d3.extent(data, function(d) { return d.date; }));
   y.domain([0, d3.max(data, function(d) { return d.y0 + d.y; })]);
+  yPos.domain([0, d3.max(data, function(d) { return d.y0 + d.y; })]);
 
   svg.selectAll(".layer")
       .data(layers)
@@ -486,7 +487,7 @@ var valueSetIndex = 11;
       .attr("font-family", "sans-serif")
       .append("text")
       .text("Date")
-      .attr("y", 30)
+      .attr("y", 35)
       .attr("x", width/2)
       .attr("text-anchor", "middle")
       .attr("font-family", "sans-serif")
