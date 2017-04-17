@@ -47,10 +47,10 @@ chart("MexicoData.csv", "orange");
 var datearray = [];
 var colorrange = [];
 
-var topTermsNo = 30;
+var topTermsNo = 50;
 var highestVal = 0;
   var sizeScale = d3.scale.linear()
-          .range([10,25]);
+          .range([8,30]);
 function chart(csvpath, color) {
 
 if (color == "blue") {
@@ -69,7 +69,7 @@ var timeAxisFormat = d3.time.format("%Y-%m-%d");
 
 var margin = {top: 20, right: 40, bottom: 30, left: 80};
 var width = document.body.clientWidth - margin.left - margin.right;
-var height = 450 - margin.top - margin.bottom;
+var height = 550 - margin.top - margin.bottom;
 var dateRange;
 var tooltip = d3.select("body")
     .append("div")
@@ -84,7 +84,10 @@ var x = d3.time.scale()
     .range([0, width]);
 
 var y = d3.scale.linear()
-    .range([height-11, 0]);
+    .range([height-29, 0]);
+
+var yPos = d3.scale.linear()
+    .range([height-20, 0]);
 
 var z = d3.scale.category20();
 
@@ -95,7 +98,7 @@ var xAxis = d3.svg.axis()
     .tickFormat(timeAxisFormat);
 
 var yAxis = d3.svg.axis()
-    .scale(y)    
+    .scale(yPos)    
     .ticks(5)
     // .tickValues([0, 0.5, 1.0, 1.5, 2.0, 2.5, 3.055]);
 
@@ -173,6 +176,8 @@ console.log(d3.extent(data, function(d) { return d.value; }))
     var currentKey = keysArray[i].terms;
     uniquekeys.push(currentKey);
   }
+
+  uniquekeys = ["reform", "CNTE", "tropical", "Ingrid", "flood", "Storm", "Mexico", "Manuel", "Hurricane", "rain", "affect", "Police", "protest", "manifestant", "March", "master", "Acapulco", "Showdown", "Revolution", "hurt", "unemployment", "join", "movement", "block", "depression", "water", "power", "teacher", "student", "professor", "follow", "Gulf", "stop", "worker", "meet", "hit", "launch", "inform", "authority", "people", "rise ", "help ", "death ", "damage", "dead", "defense", "demand", "EPN", "xico", "Calo"];
   console.log(uniquekeys)
   // console.log(data)
 
@@ -318,6 +323,8 @@ var largeVal = 0;
                   xMar = -40;
                 if(j==0)
                   xMar = 25;
+                if(d.key =="reform")
+                  xMar = 20;
                 return x(d.values[j].date) + xMar ; 
             })
       .attr("y", function(d) {
@@ -335,11 +342,14 @@ var largeVal = 0;
                 if(d.key == "drought")
                   j = 4;
 
-                // console.log(d.key + " date: " + d.values[j].date )
-                // console.log(y(d.values[j].y0) + " " + y(d.values[j].y))
-                // console.log(y(d.values[j].y0));
-                // console.log(y(d.values[j].y + d.values[j].y0));
-              return (y(d.values[j].y + d.values[j].y0) + y(d.values[j].y0))/2 + 5;
+                var yStepVal = 5;
+                if(d.key == "reform")
+                  yStepVal = 20;
+                else if(d.key == "master")
+                  yStepVal = 25;
+                else if(d.key == "protest")
+                  yStepVal = 0;
+              return (y(d.values[j].y + d.values[j].y0) + y(d.values[j].y0))/2 + yStepVal;
             })
       .attr("font-size", function(d) {
                  var i = 0;
@@ -353,7 +363,10 @@ var largeVal = 0;
                       }
                     }
                 }
+                if(val>200)
                  return sizeScale(val)
+               else 
+                return 0;
               })
       .attr("text-anchor", "middle")
       
@@ -403,6 +416,8 @@ var valueSetIndex = 11;
                   xMar = -45;
                 if(valueSetIndex==0)
                   xMar = 32;
+                if(d.key =="reform")
+                  xMar = -10;
 
                 if(d.values[valueSetIndex].value>minVal)
                 return x(d.values[valueSetIndex].date) + xMar; 
@@ -434,7 +449,15 @@ var valueSetIndex = 11;
                   });
                  indexOfVal = valueSet[valueSetIndex].index;
 
-              return (y(d.values[valueSetIndex].y + d.values[valueSetIndex].y0) + y(d.values[valueSetIndex].y0))/2+5;
+              var yStepVal = 5;
+                if(d.key == "reform")
+                  yStepVal = 5;
+                else if(d.key == "master")
+                  yStepVal = 25;
+                else if(d.key == "protest")
+                  yStepVal = 0;
+
+              return (y(d.values[valueSetIndex].y + d.values[valueSetIndex].y0) + y(d.values[valueSetIndex].y0))/2+ yStepVal;
             })
       .attr("font-size", function(d) {
          var valueSet = [];
@@ -458,7 +481,7 @@ var valueSetIndex = 11;
 
   svg.append("g")
       .attr("class", "x axis")
-      .attr("transform", "translate(0," + 390 + ")")
+      .attr("transform", "translate(0," + 480 + ")")
       .call(xAxis)
       .attr("font-family", "sans-serif")
       .append("text")
