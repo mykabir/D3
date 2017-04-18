@@ -47,7 +47,7 @@ chart("MexicoData.csv", "orange");
 var datearray = [];
 var colorrange = [];
 
-var topTermsNo = 50;
+var topTermsNo = 42;
 var highestVal = 0;
   var sizeScale = d3.scale.linear()
           .range([8,30]);
@@ -177,7 +177,7 @@ console.log(d3.extent(data, function(d) { return d.value; }))
     uniquekeys.push(currentKey);
   }
 
-  uniquekeys = ["reform", "CNTE", "tropical", "Ingrid", "flood", "Storm", "Mexico", "Manuel", "Hurricane", "rain", "affect", "Police", "protest", "manifestant", "March", "master", "Acapulco", "Showdown", "Revolution", "hurt", "unemployment", "join", "movement", "block", "depression", "water", "power", "teacher", "student", "professor", "follow", "Gulf", "stop", "worker", "meet", "hit", "launch", "inform", "authority", "people", "rise ", "help ", "death ", "damage", "dead", "defense", "demand", "EPN", "xico", "Calo"];
+  uniquekeys = ["tropical", "Ingrid", "flood", "Storm", "Mexico", "Manuel", "Hurricane", "rain", "affect", "Police", "protest", "nanifestant", "March", "master", "Acapulco", "Showdown", "Revolution", "hurt", "unemployment", "join", "movement", "block", "depression", "water", "power", "follow", "Gulf", "stop", "worker", "meet", "hit", "launch", "inform", "authority", "people", "rise", "help", "death ", "damage", "dead", "defense", "demand"];
   console.log(uniquekeys)
   // console.log(data)
 
@@ -326,6 +326,9 @@ var largeVal = 0;
                   xMar = 25;
                 if(d.key =="reform")
                   xMar = 20;
+                if(d.key =="Mexico")
+                  xMar = 20;
+
                 return x(d.values[j].date) + xMar ; 
             })
       .attr("y", function(d) {
@@ -372,7 +375,7 @@ var largeVal = 0;
       .attr("text-anchor", "middle")
       
 var indexOfVal = 0;
-var minVal = 500;
+var minVal = 340;
 var valueSetIndex = 11;
    svg.append("g").selectAll("text")
       .data(layers)
@@ -419,6 +422,121 @@ var valueSetIndex = 11;
                   xMar = 32;
                 if(d.key =="reform")
                   xMar = -10;
+                 if(d.key =="Mexico"){
+                  xMar = 20;
+                  // valueSetIndex = 7;
+                }
+
+                if(d.values[valueSetIndex].value>minVal)
+                return x(d.values[valueSetIndex].date) + xMar; 
+            })
+      .attr("y", function(d) {
+                 var i = 0;
+                 var val = 0;
+                 var j = 0;
+                for(i=0;i<d.values.length;i++){
+                    if(d.values[i].value!=0){
+                      if(d.values[i].value >= val){
+                        val = d.values[i].value;
+                        j = i;
+                      }
+                    }
+                }
+                if(d.key == "drought")
+                  j = 4;
+
+                 var valueSet = [];
+                for(i=0;i<d.values.length;i++){
+                    var obj = {};
+                    obj.value = d.values[i].value;
+                    obj.index = i;
+                    valueSet.push(obj);
+                }
+                 valueSet.sort(function(a, b) {
+                    return parseFloat(b.value) - parseFloat(a.value);
+                  });
+                 indexOfVal = valueSet[valueSetIndex].index;
+
+              var yStepVal = 5;
+                if(d.key == "reform")
+                  yStepVal = 5;
+                else if(d.key == "master")
+                  yStepVal = 25;
+                else if(d.key == "protest")
+                  yStepVal = 0;
+
+              return (y(d.values[valueSetIndex].y + d.values[valueSetIndex].y0) + y(d.values[valueSetIndex].y0))/2+ yStepVal;
+            })
+      .attr("font-size", function(d) {
+         var valueSet = [];
+                for(i=0;i<d.values.length;i++){
+                    var obj = {};
+                    obj.value = d.values[i].value;
+                    obj.index = i;
+                    valueSet.push(obj);
+                }
+                 valueSet.sort(function(a, b) {
+                    return parseFloat(b.value) - parseFloat(a.value);
+                  });
+                 indexOfVal = valueSet[valueSetIndex].index;
+
+                 var val = d.values[valueSetIndex].value;
+                 return sizeScale(val)
+              })
+      .attr("text-anchor", "middle")
+
+      var indexOfVal = 0;
+var minVal = 500;
+var valueSetIndex = 8;
+   svg.append("g").selectAll("text")
+      .data(layers)
+      .enter().append("text")
+      .text(function(d){
+            // console.log(d); 
+             var valueSet = [];
+                for(i=0;i<d.values.length;i++){
+                    var obj = {};
+                    obj.value = d.values[i].value;
+                    obj.index = i;
+                    valueSet.push(obj);
+                }
+                 valueSet.sort(function(a, b) {
+                    return parseFloat(b.value) - parseFloat(a.value);
+                  });
+                 indexOfVal = valueSet[valueSetIndex].index;
+
+                  if( d.key == "March" || d.key == "Mexico" || d.key == "rain" )
+              return d.key;
+        })
+      .attr("x", function(d) {
+                 var i = 0;
+                 var val = 0;
+                 var j = 0;
+                 var xPosCount = 0;
+                 var valueSet = [];
+                for(i=0;i<d.values.length;i++){
+                    var obj = {};
+                    obj.value = d.values[i].value;
+                    obj.index = i;
+                    valueSet.push(obj);
+                }
+                 valueSet.sort(function(a, b) {
+                    return parseFloat(b.value) - parseFloat(a.value);
+                  });
+                 indexOfVal = valueSet[valueSetIndex].index;
+                console.log(indexOfVal);
+                
+                var xMar = 0;
+                if(valueSetIndex==d.values.length-1)
+                  xMar = -45;
+                if(valueSetIndex==0)
+                  xMar = 32;
+                if(d.key =="reform")
+                  xMar = -10;
+                 if(d.key =="Mexico"){
+                  xMar = 0;
+                  // valueSetIndex = 7;
+                }
 
                 if(d.values[valueSetIndex].value>minVal)
                 return x(d.values[valueSetIndex].date) + xMar; 
