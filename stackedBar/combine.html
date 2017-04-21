@@ -26,12 +26,12 @@ d3.csv("data.csv", function(d, i, columns) {
 }, function(error, data) {
   if (error) throw error;
 var svg = d3.select("#stackBar").append("svg")
-            .attr("width", 960)
-            .attr("height", 520),
-    margin = {top: 20, right: 20, bottom: 30, left: 40},
+            .attr("width", 1400)
+            .attr("height", 620),
+    margin = {top: 20, right: 60, bottom: 30, left: 40},
     width = +svg.attr("width") - margin.left - margin.right,
     height = +svg.attr("height") - margin.top - margin.bottom,
-    g = svg.append("g").attr("transform", "translate(" + 60 + "," + margin.top + ")");
+    g = svg.append("g").attr("transform", "translate(" + 95 + "," + margin.top + ")");
 
 var x = d3.scaleBand()
     .rangeRound([0, width])
@@ -76,10 +76,10 @@ var newkey = ["climate protests"];
       .data(function(d,i) { return d; })
       .enter().append("text")
       .text(function(d,i){ j++; if(j<18) { return d[1]; } })
-      .attr("x", function(d) { return x(d.data.country) + 25; })
+      .attr("x", function(d) { return x(d.data.country) +  x.bandwidth()/2; })
       .attr("y", function(d) { return y(d[1]) - 5; })
       .attr("width", x.bandwidth())
-      .attr("font-size", 14)
+      .attr("font-size", 24)
       .style("text-anchor", "middle")
       .style("fill", '#000')
       .attr("font-family", "sans-serif");
@@ -102,16 +102,18 @@ var newkey = ["climate protests"];
       .attr("transform", "translate(0," + 450 + ")")
       .call(d3.axisBottom(x))
       .selectAll("text")  
-            .attr("font-size", 10);
+            .attr("font-size", 22)
+            .attr("transform", "rotate(-25)" )
+            .attr("text-anchor", "end")
 
    g.append("text")             
       .attr("transform",
             "translate(" + (width/2) + " ," + 
-                           (450 + margin.top + 20) + ")")
+                           (450 + margin.top + 80) + ")")
       .style("text-anchor", "middle")
       .text("Countries")
       .attr("font-family", "sans-serif")
-      .attr("font-size", 16);
+      .attr("font-size", 25);
 
 
   g.append("g")
@@ -120,37 +122,38 @@ var newkey = ["climate protests"];
        .selectAll("text")
        .attr("width", 20)
        .attr("font-family", "sans-serif")
-       .attr("font-size", 12);
+       .attr("font-size", 22);
     
   g.append("g")
       .attr("class", "axis")
-      .attr("transform", "translate(-50," + 295 + ")")
+      .attr("transform", "translate(-75," + 295 + ")")
       .append("text")
       .text("Number of protests")
       .attr("font-family", "sans-serif")
-      .attr("font-size", 16)
+      .attr("font-size", 25)
       .attr("transform", "rotate(-90)" );
 
 
   var legend = g.append("g")
-      .attr("font-size", 14)
+      .attr("font-size", 40)
       .attr("font-family", "sans-serif")
       .attr("text-anchor", "end")
     .selectAll("g")
     .data(keys.slice().reverse())
     .enter().append("g")
-      .attr("transform", function(d, i) { return "translate(0," + i * 20 + ")"; });
+      .attr("transform", function(d, i) { return "translate(0," + i * 42 + ")"; });
 
   legend.append("rect")
-      .attr("x", width - 19)
-      .attr("width", 19)
-      .attr("height", 19)
+      .attr("x", width - 35)
+      .attr("y", 60)
+      .attr("width", 40)
+      .attr("height", 40)
       .attr("fill", z)
       .attr("opacity", function(d){if(d == "other protests") return .25; else return 1;});
 
   legend.append("text")
-      .attr("x", width - 24)
-      .attr("y", 9.5)
+      .attr("x", width - 40)
+      .attr("y", 78)
       .attr("dy", "0.32em")
       .text(function(d) { return d; });
 
@@ -162,12 +165,12 @@ var newkey = ["climate protests"];
 
 d3.csv("data.csv", type, function(error, data) {
   var svg2 = d3.select("#percentBar").append("svg")
-            .attr("width", 960)
-            .attr("height", 550),
-    margin = {top: 20, right: 20, bottom: 30, left: 40},
+            .attr("width", 1400)
+            .attr("height", 620),
+     margin = {top: 20, right: 60, bottom: 30, left: 40},
     width = +svg2.attr("width") - margin.left - margin.right,
     height = +svg2.attr("height") - margin.top - margin.bottom,
-    g = svg2.append("g").attr("transform", "translate(" + 58 + "," + margin.top  +")");
+    g = svg2.append("g").attr("transform", "translate(" + 95 + "," + margin.top + ")");
 
   if (error) throw error;
   data.sort(function(a, b) { return b.total - a.total; });
@@ -212,45 +215,47 @@ var k =0;
       .data(function(d,i) { return d; })
       .enter().append("text")
       .text(function(d,i){ j++; if(j>18) { return (d[0]*100).toFixed(1) + "%"; } })
-      .attr("x", function(d) { return x(d.data.country) + 25; })
+      .attr("x", function(d) { return x(d.data.country) + x.bandwidth()/2;})
       .attr("y", function(d) { return y(d[0]) -5; })
       .attr("height", function(d) { return y(d[0]) - y(d[1]); })
       .attr("width", x.bandwidth())
-      .attr("font-size", 14)
+      .attr("font-size", 24)
       .style("text-anchor", "middle")
       .style("fill", '#000')
       .attr("font-family", "sans-serif");
 
   g.append("g")
-      .attr("class", "axis axis--x")
+      .attr("class", "axis")
       .attr("transform", "translate(0," + 450 + ")")
       .call(d3.axisBottom(x))
       .selectAll("text")  
-            .attr("font-size", 10)
-            .attr("font-family", "sans-serif")
+            .attr("font-size", 22)
+            .attr("transform", "rotate(-25)" )
+            .attr("text-anchor", "end")
 
    g.append("text")             
       .attr("transform",
             "translate(" + (width/2) + " ," + 
-                           (450 + margin.top + 20) + ")")
+                           (450 + margin.top + 80) + ")")
       .style("text-anchor", "middle")
       .text("Countries")
       .attr("font-family", "sans-serif")
-      .attr("font-size", 16);
+      .attr("font-size", 25);
 
   g.append("g")
       .attr("class", "axis axis--y")
       .call(d3.axisLeft(y).ticks(10, "%"))
       .selectAll("text")
       .attr("font-family", "sans-serif")
-      .attr("font-size", 12);
+      .attr("font-size", 22);
+      
 
   g.append("g")
       .attr("class", "axis")
-      .attr("transform", "translate(-45," + 305 + ")")
+      .attr("transform", "translate(-65," + 370 + ")")
       .append("text")
       .text("Climate protests percentage")
-      .attr("font-size", 16)
+      .attr("font-size", 25)
       .attr("font-family", "sans-serif")
       .attr("transform", "rotate(-90)" );
 
