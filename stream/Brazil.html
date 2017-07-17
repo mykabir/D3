@@ -36,13 +36,13 @@ text{
 <script src="https://d3js.org/d3.v2.js"></script>
 
 
-<div class="chart">
+<div class="chart"> 
 </div>
 
 <script>
  
 
-chart("MexicoData.csv", "orange"); 
+chart("data.csv", "orange"); 
 
 var datearray = [];
 var colorrange = [];
@@ -53,19 +53,9 @@ var highestVal = 0;
           .range([10,25]);
 function chart(csvpath, color) {
 
-if (color == "blue") {
-  colorrange = ["#045A8D", "#2B8CBE", "#74A9CF", "#A6BDDB", "#D0D1E6", "#F1EEF6"];
-}
-else if (color == "pink") {
-  colorrange = ["#980043", "#DD1C77", "#DF65B0", "#C994C7", "#D4B9DA", "#F1EEF6"];
-}
-else if (color == "orange") {
-  colorrange = ["#B30000", "#E34A33", "#FC8D59", "#FDBB84", "#FDD49E", "#FEF0D9"];
-}
-strokecolor = colorrange[0];
 
-var format = d3.time.format("%m/%d/%Y");
-var timeAxisFormat = d3.time.format("%Y-%m-%d");
+var format = d3.time.format("%Y-%m-%d %H:%M:%S");
+var timeAxisFormat = d3.time.format("%Y-%m-%d %H:%M:%S");
 
 var margin = {top: 20, right: 40, bottom: 30, left: 80};
 var width = document.body.clientWidth - margin.left - margin.right;
@@ -132,10 +122,11 @@ var graph = d3.csv(csvpath, function(data) {
 
 
   var termsKeysValue = {};
-
+console.log(data)
   data.forEach(function(d) {
-    d.date = format.parse(d.date);
-    d.value = +d.value;
+    d.date = format.parse(d.Timestamp);
+    // console.log(d.date)
+    d.value = 1;
     allDates.push(d.date);
   
 
@@ -185,29 +176,12 @@ console.log(d3.extent(data, function(d) { return d.value; }))
     allkeys.push(d.key);
   });
 
-// var uniquekeys = allkeys.filter(function(elem, index, self) {
-//     return index == self.indexOf(elem);
-// })
-// // console.log(uniquekeys[topTermsNo]);
-
-//     var spliceLen = 0;
-//     for(var i=0;i<data.length;i++){
-//         if(data[i].key == uniquekeys[topTermsNo]){
-//           spliceLen = i;
-//           break;
-//         }
-//     }
-// console.log(spliceLen);
-//  data = data.splice(0, spliceLen);
   dateRange = d3.extent(data, function(d) { return d.date; });
   // console.log(dateRange);
   // console.log(data.length);
     var start = dateRange[0];
     var end = dateRange[1];
 
-// var uniquekeys = allkeys.filter(function(elem, index, self) {
-//     return index == self.indexOf(elem);
-// })
 
 function isDateInArray(needle, haystack) {
   for (var i = 0; i < haystack.length; i++) {
@@ -224,23 +198,6 @@ for (var i = 0; i < allDates.length; i++) {
     uniqueDates.push(allDates[i]);
   }
 }
-// var startDate = new Date(uniqueDates[0])
-// startDate.setDate(startDate.getDate()-1);
-
-// var endDate = new Date(uniqueDates[uniqueDates.length-1])
-// endDate.setDate(endDate.getDate()+1);
-
-// console.log(startDate)
-// console.log(endDate)
-// var addedDates = [];
-// addedDates.push(startDate);
-// for(var i=0; i<uniqueDates.length;i++){
-//     addedDates.push(uniqueDates[i]);
-// }
-// addedDates.push(endDate);
-// console.log(addedDates)
-
-// uniqueDates = addedDates;
 
 console.log(uniquekeys);
 console.log(uniqueDates);
@@ -282,22 +239,6 @@ var largeVal = 0;
    svg.selectAll("text")
       .data(layers)
       .enter().append("text")
-      .text(function(d){
-            // console.log(d); 
-            var i = 0;
-                 var val = 0;
-                 var j = 0;
-                for(i=0;i<d.values.length;i++){
-                    if(d.values[i].value!=0){
-                      if(d.values[i].value >= val){
-                        val = d.values[i].value;
-                        j = i;
-                       }
-                    }
-                }
-         
-              return d.key;
-        })
       .attr("x", function(d) {
                  var i = 0;
                  var val = 0;
@@ -335,11 +276,6 @@ var largeVal = 0;
                 }
                 if(d.key == "drought")
                   j = 4;
-
-                // console.log(d.key + " date: " + d.values[j].date )
-                // console.log(y(d.values[j].y0) + " " + y(d.values[j].y))
-                // console.log(y(d.values[j].y0));
-                // console.log(y(d.values[j].y + d.values[j].y0));
                 var yStepVal = 5;
                 if(d.key == "reform")
                   yStepVal = -5;
@@ -365,128 +301,6 @@ var largeVal = 0;
                  return sizeScale(val)
               })
       .attr("text-anchor", "middle")
-
-var indexOfVal = 0;
-var valueSetIndex = 3;
-   svg.append("g").selectAll("text")
-      .data(layers)
-      .enter().append("text")
-      .text(function(d){
-            // console.log(d); 
-             var valueSet = [];
-                for(i=0;i<d.values.length;i++){
-                    var obj = {};
-                    obj.value = d.values[i].value;
-                    obj.index = i;
-                    valueSet.push(obj);
-                }
-                 valueSet.sort(function(a, b) {
-                    return parseFloat(b.value) - parseFloat(a.value);
-                  });
-                 indexOfVal = valueSet[valueSetIndex].index;
-
-                  if(d.values[indexOfVal].value>500)
-              return d.key;
-        })
-      .attr("x", function(d) {
-                 var i = 0;
-                 var val = 0;
-                 var j = 0;
-                 var xPosCount = 0;
-                 var valueSet = [];
-                for(i=0;i<d.values.length;i++){
-                    var obj = {};
-                    obj.value = d.values[i].value;
-                    obj.index = i;
-                    valueSet.push(obj);
-                }
-                 valueSet.sort(function(a, b) {
-                    return parseFloat(b.value) - parseFloat(a.value);
-                  });
-                 indexOfVal = valueSet[valueSetIndex].index;
-                console.log(indexOfVal);
-                if(d.key == "Hurricane")
-                  indexOfVal = 2;
-                else if(d.key == "Manuel")
-                  indexOfVal = 3;
-                else if(d.key == "CNTE")
-                  indexOfVal = 6;
-                
-
-                var xMar = 0;
-                if(indexOfVal==d.values.length-1)
-                  xMar = -45;
-                if(indexOfVal==0)
-                  xMar = 32;
-
-                 if(d.key == "Hurricane")
-                  xMar = 110;
-
-                if(d.values[indexOfVal].value>10)
-                return x(d.values[indexOfVal].date) + xMar; 
-            })
-      .attr("y", function(d) {
-                 var i = 0;
-                 var val = 0;
-                 var j = 0;
-                for(i=0;i<d.values.length;i++){
-                    if(d.values[i].value!=0){
-                      if(d.values[i].value >= val){
-                        val = d.values[i].value;
-                        j = i;
-                      }
-                    }
-                }
-                if(d.key == "drought")
-                  j = 4;
-
-                 var valueSet = [];
-                for(i=0;i<d.values.length;i++){
-                    var obj = {};
-                    obj.value = d.values[i].value;
-                    obj.index = i;
-                    valueSet.push(obj);
-                }
-                 valueSet.sort(function(a, b) {
-                    return parseFloat(b.value) - parseFloat(a.value);
-                  });
-                 indexOfVal = valueSet[valueSetIndex].index;
-
-
-                  var yStepVal = 5;
-                if(d.key == "Manuel")
-                  yStepVal = 15;
-                else if(d.key == "master")
-                  yStepVal = 20;
-                 else if(d.key == "CNTE")
-                  yStepVal = 10;
-                 else if(d.key == "Hurricane")
-                  yStepVal = 3;
-
-
-              return (y(d.values[indexOfVal].y + d.values[indexOfVal].y0) + y(d.values[indexOfVal].y0))/2 + yStepVal;
-            })
-      .attr("font-size", function(d) {
-         var valueSet = [];
-                for(i=0;i<d.values.length;i++){
-                    var obj = {};
-                    obj.value = d.values[i].value;
-                    obj.index = i;
-                    valueSet.push(obj);
-                }
-                 valueSet.sort(function(a, b) {
-                    return parseFloat(b.value) - parseFloat(a.value);
-                  });
-                 indexOfVal = valueSet[valueSetIndex].index;
-
-                 var val = d.values[indexOfVal].value;
-                 return sizeScale(val)
-              })
-      .attr("text-anchor", "middle")
-
-
-
-
 
   svg.append("g")
       .attr("class", "x axis")
