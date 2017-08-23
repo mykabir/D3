@@ -36,17 +36,13 @@ text{
 <script src="https://d3js.org/d3.v2.js"></script>
 
 
-<div class="chart"> 
+<div class="chart">
 </div>
 
 <script>
  
 
-<<<<<<< HEAD
-chart("data.csv", "orange"); 
-=======
 chart("Brazil.csv", "orange");
->>>>>>> origin/master
 
 var datearray = [];
 var colorrange = [];
@@ -57,9 +53,19 @@ var highestVal = 0;
           .range([8,30]);
 function chart(csvpath, color) {
 
+if (color == "blue") {
+  colorrange = ["#045A8D", "#2B8CBE", "#74A9CF", "#A6BDDB", "#D0D1E6", "#F1EEF6"];
+}
+else if (color == "pink") {
+  colorrange = ["#980043", "#DD1C77", "#DF65B0", "#C994C7", "#D4B9DA", "#F1EEF6"];
+}
+else if (color == "orange") {
+  colorrange = ["#B30000", "#E34A33", "#FC8D59", "#FDBB84", "#FDD49E", "#FEF0D9"];
+}
+strokecolor = colorrange[0];
 
-var format = d3.time.format("%Y-%m-%d %H:%M:%S");
-var timeAxisFormat = d3.time.format("%Y-%m-%d %H:%M:%S");
+var format = d3.time.format("%m/%d/%Y");
+var timeAxisFormat = d3.time.format("%Y-%m-%d");
 
 var margin = {top: 20, right: 40, bottom: 30, left: 80};
 var width = document.body.clientWidth - margin.left - margin.right;
@@ -129,11 +135,10 @@ var graph = d3.csv(csvpath, function(data) {
 
 
   var termsKeysValue = {};
-console.log(data)
+
   data.forEach(function(d) {
-    d.date = format.parse(d.Timestamp);
-    // console.log(d.date)
-    d.value = 1;
+    d.date = format.parse(d.date);
+    d.value = +d.value;
     allDates.push(d.date);
   
 
@@ -185,12 +190,29 @@ console.log(d3.extent(data, function(d) { return d.value; }))
     allkeys.push(d.key);
   });
 
+// var uniquekeys = allkeys.filter(function(elem, index, self) {
+//     return index == self.indexOf(elem);
+// })
+// // console.log(uniquekeys[topTermsNo]);
+
+//     var spliceLen = 0;
+//     for(var i=0;i<data.length;i++){
+//         if(data[i].key == uniquekeys[topTermsNo]){
+//           spliceLen = i;
+//           break;
+//         }
+//     }
+// console.log(spliceLen);
+//  data = data.splice(0, spliceLen);
   dateRange = d3.extent(data, function(d) { return d.date; });
   // console.log(dateRange);
   // console.log(data.length);
     var start = dateRange[0];
     var end = dateRange[1];
 
+// var uniquekeys = allkeys.filter(function(elem, index, self) {
+//     return index == self.indexOf(elem);
+// })
 
 function isDateInArray(needle, haystack) {
   for (var i = 0; i < haystack.length; i++) {
@@ -207,8 +229,6 @@ for (var i = 0; i < allDates.length; i++) {
     uniqueDates.push(allDates[i]);
   }
 }
-<<<<<<< HEAD
-=======
 var startDate = new Date(uniqueDates[0])
 startDate.setDate(startDate.getDate()-1);
 
@@ -224,7 +244,6 @@ for(var i=0; i<uniqueDates.length;i++){
 }
 addedDates.push(endDate);
 console.log(addedDates)
->>>>>>> origin/master
 
 uniqueDates = addedDates;
 console.log(uniquekeys);
@@ -268,8 +287,6 @@ var largeVal = 0;
    svg.selectAll("text")
       .data(layers)
       .enter().append("text")
-<<<<<<< HEAD
-=======
       .text(function(d){
             // console.log(d); 
             var i = 0;
@@ -286,7 +303,6 @@ var largeVal = 0;
          
               return d.key;
         })
->>>>>>> origin/master
       .attr("x", function(d) {
                  var i = 0;
                  var val = 0;
@@ -334,9 +350,6 @@ var largeVal = 0;
                     }
                 }
                 if(d.key == "drought")
-<<<<<<< HEAD
-                  j = 4;
-=======
                   j = 3;
                 if(d.key == "prune")
                   j = 3;
@@ -345,7 +358,6 @@ var largeVal = 0;
                 if(d.key == "Brazil")
                   j = 2;
 
->>>>>>> origin/master
                 var yStepVal = 5;
                 if(d.key == "reform")
                   yStepVal = 20;
@@ -373,8 +385,6 @@ var largeVal = 0;
                 return 0;
               })
       .attr("text-anchor", "middle")
-<<<<<<< HEAD
-=======
       
 var indexOfVal = 0;
 var minVal = 200;
@@ -611,7 +621,6 @@ var valueSetIndex = 5;
       .attr("text-anchor", "middle")
 
  
->>>>>>> origin/master
 
   svg.append("g")
       .attr("class", "x axis")
